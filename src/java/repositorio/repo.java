@@ -59,4 +59,57 @@ public class repo {
         }
         return null;
     }
+    
+    public boolean enviarPedido(int clienteMatricula, int produtoCodigo, int quantidade, int numeroPedido){
+        Cliente cliente = null;
+        Produto produto = null;
+        for (Cliente cli : popularCliente()) {
+            if(cli.getMatricula() == clienteMatricula){
+                cliente = cli;
+            }
+        }
+        
+        for (Produto prod : popularProduto()) {
+            if(prod.getCodigo() == produtoCodigo){
+                produto = prod;
+                double valorDescontarSaldo = prod.getValor() * quantidade;//usar futuramente
+            }
+        }
+        if(cliente != null && produto != null){
+            aPedido.add(new Pedido(cliente, produto, quantidade, false, numeroPedido));
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public double saldo(int matricula){
+        double saldo = 0;
+        for (Cliente cli : popularCliente()) {
+            if(cli.getMatricula() == matricula){
+               saldo = cli.getSaldo();
+            }
+        }
+        return saldo;
+    }
+    
+    public Pedido pegarPedido(){
+        for (Pedido ped : popularPedido()) {
+            if(ped.isPedidoConfirmado() == false){
+               return ped;
+            }
+        }
+        return null;
+    }
+    
+    public boolean confirmarPedido(int numeroPedido){
+        boolean ok = false;
+        for (Pedido ped : popularPedido()) {
+            if(ped.getNumeroPedido() == numeroPedido){
+               ped.setPedidoConfirmado(true);
+               ok = true;
+            }
+        }
+        return ok;
+    }
 }
