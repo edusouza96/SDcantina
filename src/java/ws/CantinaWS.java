@@ -1,48 +1,93 @@
 package ws;
 
+import com.google.gson.Gson;
 import java.util.List;
-import javax.jws.WebService;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import model.Cliente;
-import model.Pedido;
 import model.Produto;
 
 /**
+ * REST Web Service
  *
  * @author Edu
  */
-@WebService(serviceName = "CantinaWS")
+@Path("cantina")
 public class CantinaWS {
 
-    @WebMethod(operationName = "autenticar")
-    public Cliente autenticar(@WebParam(name = "matricula") int matricula, @WebParam(name = "senha") String senha) {
+    @Context
+    private UriInfo context;
+
+    /**
+     * Creates a new instance of CantinaWS
+     */
+    public CantinaWS() {
+    }
+
+    /**
+     * Retrieves representation of an instance of ws.CantinaWS
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Produces("application/json")
+    public String getJson() {
+        return "hello world";
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("autenticar/{matricula}/{senha}")
+    public String autenticar(@PathParam("matricula") int matricula, @PathParam("senha") String senha) {
         Cliente cliente = new repositorio.repo().autenticar(matricula, senha);
-        return cliente;
+        Gson g = new Gson();
+        return g.toJson(cliente);
     }
     
-    @WebMethod(operationName = "cardapio")
-    public List<Produto> cardapio(){
-        return new repositorio.repo().popularProduto();
+    @GET
+    @Produces("application/json")
+    @Path("cardapio")
+    public String cardapio() {
+        List<Produto> lista = new repositorio.repo().popularProduto();
+        Gson g = new Gson();
+        return g.toJson(lista);
     }
     
-    @WebMethod(operationName = "enviar_pedido")
-    public boolean enviarPedido(@WebParam(name = "clienteMatricula") int clienteMatricula,@WebParam(name = "produtoCodigo") int produtoCodigo,@WebParam(name = "quantidade") int quantidade,@WebParam(name = "numeroPedido") int numeroPedido){
-        return new repositorio.repo().enviarPedido(clienteMatricula, produtoCodigo, quantidade, numeroPedido);
+    @POST
+    @Consumes({"application/json"})
+    @Path("enviar_pedido")
+    public String enviarPedido(@PathParam("clienteMatricula") int clienteMatricula,@PathParam("produtoCodigo") int produtoCodigo,@PathParam("quantidade") int quantidade,@PathParam("numeroPedido") int numeroPedido){
+        Gson g = new Gson();
+        return g.toJson(new repositorio.repo().enviarPedido(clienteMatricula, produtoCodigo, quantidade, numeroPedido));
+        
     }
     
-    @WebMethod(operationName = "saldo")
-    public double saldo(@WebParam(name = "matricula")int matricula){
-        return new repositorio.repo().saldo(matricula);
+    @GET
+    @Produces("application/json")
+    @Path("saldo/{matricula}")
+    public String saldo(@PathParam("matricula")int matricula){
+        Gson g = new Gson();
+        return g.toJson(new repositorio.repo().saldo(matricula));
     }
     
-    @WebMethod(operationName = "pegar_pedido")
-    public Pedido pegarPedido(){
-        return new repositorio.repo().pegarPedido();
+    @GET
+    @Produces("application/json")
+    @Path("pegar_pedido")
+    public String pegarPedido(){
+        Gson g = new Gson();
+        return g.toJson(new repositorio.repo().pegarPedido());
     }
-    
-    @WebMethod(operationName = "confirmar_pedido")
-    public boolean confirmarPedido(@WebParam(name = "numeroPedido") int numeroPedido){
-        return new repositorio.repo().confirmarPedido(numeroPedido);
+   
+    @GET
+    @Produces("application/json")
+    @Path("confirmar_pedido/{numeroPedido}")
+    public String confirmarPedido(@PathParam("numeroPedido") int numeroPedido){
+        Gson g = new Gson();
+        return g.toJson(new repositorio.repo().confirmarPedido(numeroPedido));
     }
 }
