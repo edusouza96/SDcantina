@@ -10,18 +10,44 @@ public class Pedido {
     private int quantidade;
     private boolean pedidoConfirmado;
     private int numeroPedido;
+    private int clienteId;
+    private int produtoId;
 
     public Pedido() {
     }
 
-    public Pedido(Cliente cliente, Produto produto, int quantidade, boolean pedidoConfirmado, int numeroPedido) {
+    public Pedido(Cliente cliente, Produto produto, int quantidade, boolean pedidoConfirmao, int numeroPedido) {
         this.cliente = cliente;
         this.produto = produto;
+        this.pedidoConfirmado = pedidoConfirmao;
         this.quantidade = quantidade;
-        this.pedidoConfirmado = pedidoConfirmado;
         this.numeroPedido = numeroPedido;
     }
 
+    public Pedido(int cliente, int produto, int quantidade, int numeroPedido) {
+        this.clienteId = cliente;
+        this.produtoId = produto;
+        this.quantidade = quantidade;
+        this.numeroPedido = numeroPedido;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public int getProdutoId() {
+        return produtoId;
+    }
+
+    public void setProdutoId(int produtoId) {
+        this.produtoId = produtoId;
+    }
+    
+    
     public Cliente getCliente() {
         return cliente;
     }
